@@ -57,3 +57,5 @@ This plugin uses an `iframe` to load the Axiom web application (`https://axiom.a
 2. Create a folder `axiom-mindmap` in your vault's `.obsidian/plugins/` directory.
 3. Place the files in that folder.
 4. Reload Obsidian.
+
+Join our discord: https://discord.gg/cXMBKGzdyB
