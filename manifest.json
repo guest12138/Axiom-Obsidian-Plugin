@@ -1,0 +1,10 @@
+{
+	"id": "axiom-mindmap",
+	"name": "Axiom - 3D Mind Map",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Embed Axiom 3D mind maps directly into Obsidian.",
+	"author": "Axiom Team",
+	"authorUrl": "https://axiom.ancelian.com",
+	"isDesktopOnly": false
+}
