@@ -1,5 +1,22 @@
 # Axiom - 3D Mind Map for Obsidian
 
+> **🚧 Beta Access Notice**
+>
+> This plugin is currently in **Beta** and is being reviewed for the official Obsidian Community Plugins list.
+> To use it right now, you need to install it via **BRAT**.
+
+## 🚀 How to Install (Beta)
+
+1. **Install BRAT**: Search for `BRAT` in the Obsidian Community Plugins and install it.
+2. **Add Beta Plugin**:
+   - Open Obsidian Settings > **BRAT** (sidebar).
+   - Click **Add Beta plugin**.
+   - Paste this URL: `https://github.com/guest12138/Axiom-Obsidian-Plugin`
+   - Click **Add Plugin**.
+3. **Enable**: Go to Community Plugins and enable **Axiom - 3D Mind Map**.
+
+---
+
 This plugin embeds the [Axiom 3D Mind Map](https://axiom.ancelian.com) application directly into Obsidian's sidebar.
 
 ## Features
