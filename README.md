@@ -29,9 +29,12 @@ This plugin embeds the [Axiom 3D Mind Map](https://axiom.ancelian.com) applicati
 
 1. **Open the View**: Click the "Globe" icon in the ribbon or use the command palette (`Open Axiom 3D Mind Map`) to open the view.
 2. **Login**: If you are not logged in, the view will prompt you to log in to your Axiom account.
-   > **⚠️ Login Issues?**
-   > If Google Login fails or the popup is blocked, please visit [https://axiom.ancelian.com](https://axiom.ancelian.com) in your browser (Chrome/Safari) to log in first. Then restart Obsidian, and you should be automatically logged in.
-
+   > **⚠️ Login Troubleshooting**
+   > If you experience issues signing up or logging in with Google/Email directly within Obsidian:
+   > 1. Open [https://axiom.ancelian.com](https://axiom.ancelian.com) in your regular browser (Chrome/Safari).
+   > 2. Sign up or log in there using your preferred method (Google or Email).
+   > 3. **Important**: If you used Google Login, please set a password for your account in the web settings.
+   > 4. Return to Obsidian and log in using your **Email and Password**.
 3. **Interact**: Use the mouse to navigate the 3D space, create nodes, and edit your mind map.
 
 ## Privacy & Security
