@@ -27,7 +27,7 @@ class AxiomView extends ItemView {
 		// Create the iframe
 		const frame = container.createEl("iframe");
 		frame.addClass("axiom-iframe");
-		frame.setAttr("src", "https://axiom.ancelian.com/");
+		frame.setAttr("src", "https://axiom-87ac8.web.app/app.html");
 		
 		// Security & Functionality attributes
 		// allow-scripts: Required for the web app to run

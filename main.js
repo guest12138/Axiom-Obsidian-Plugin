@@ -49,7 +49,7 @@ var AxiomView = class extends import_obsidian.ItemView {
     container.addClass("axiom-view-container");
     const frame = container.createEl("iframe");
     frame.addClass("axiom-iframe");
-    frame.setAttr("src", "https://axiom.ancelian.com/");
+    frame.setAttr("src", "https://axiom-87ac8.web.app/app.html");
     frame.setAttr("sandbox", "allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-presentation");
     frame.style.width = "100%";
     frame.style.height = "100%";
