@@ -5,11 +5,6 @@
 > This plugin is currently in **Beta** and is being reviewed for the official Obsidian Community Plugins list.
 > To use it right now, you need to install it via **BRAT**.
 
-> **⚠️ Payment Notice**
->
-> Upgrading to Pro is currently **not available** on `axiom.ancelian.com` due to iframe payment restrictions.
-> To upgrade, please visit [https://axiom-87ac8.web.app/app.html](https://axiom-87ac8.web.app/app.html) in your browser.
-
 ## Pricing
 
 | | Free | Pro ($5/month) |
@@ -19,6 +14,8 @@
 | Nodes per mind map | Up to 300 | Unlimited |
 | Cloud sync | ✓ | ✓ |
 | All features | ✓ | ✓ |
+
+Due to Obsidian's embedded environment, payments cannot be processed directly within the app. To upgrade to Pro, please login through our official website: https://axiom.ancelian.com/
 
 ## 🚀 How to Install (Beta)
 
@@ -54,7 +51,7 @@ This plugin embeds the [Axiom 3D Mind Map](https://axiom.ancelian.com) applicati
 
 ## Privacy & Security
 
-This plugin uses an `iframe` to load the Axiom web application (`https://axiom-87ac8.web.app`).
+This plugin uses an `iframe` to load the Axiom web application (`https://axiom.ancelian.com/`).
 
 - **Data Handling**: All data shown in the mind map is loaded directly from Axiom's servers. The plugin itself does not store your mind map data locally in Obsidian, nor does it intercept your login credentials.
 - **Network Requests**: The plugin makes network requests to `axiom-87ac8.web.app` to load the application and sync data.
