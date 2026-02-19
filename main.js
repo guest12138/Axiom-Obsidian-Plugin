@@ -30,15 +30,18 @@ __export(main_exports, {
 module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
 var VIEW_TYPE_AXIOM = "axiom-view";
+var CASE_EXPORT_FOLDER = "C.A.S.E.";
 var AxiomView = class extends import_obsidian.ItemView {
   constructor(leaf) {
     super(leaf);
+    this.frame = null;
+    this.messageHandler = null;
   }
   getViewType() {
     return VIEW_TYPE_AXIOM;
   }
   getDisplayText() {
-    return "Axiom 3D Mind Map";
+    return "C.A.S.E. Mind Map";
   }
   getIcon() {
     return "globe";
@@ -48,14 +51,153 @@ var AxiomView = class extends import_obsidian.ItemView {
     container.empty();
     container.addClass("axiom-view-container");
     const frame = container.createEl("iframe");
+    this.frame = frame;
     frame.addClass("axiom-iframe");
-    frame.setAttr("src", "https://axiom-87ac8.web.app/app.html");
-    frame.setAttr("sandbox", "allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-presentation");
+    frame.setAttr("src", "https://axiom.ancelian.com/app.html");
+    frame.setAttr("sandbox", "allow-scripts allow-same-origin allow-popups allow-forms allow-popups-to-escape-sandbox allow-presentation allow-downloads");
     frame.style.width = "100%";
     frame.style.height = "100%";
     frame.style.border = "none";
+    this.messageHandler = (ev) => {
+      if (ev.origin !== "https://axiom.ancelian.com")
+        return;
+      this.handleIframeMessage(ev.data);
+    };
+    window.addEventListener("message", this.messageHandler);
   }
   async onClose() {
+    if (this.messageHandler) {
+      window.removeEventListener("message", this.messageHandler);
+      this.messageHandler = null;
+    }
+    this.frame = null;
+  }
+  /**
+   * Handle messages from the C.A.S.E. iframe.
+   * Supported messages:
+   *   { type: "case-save-file", path: "relative/path.json", content: "..." }
+   *   { type: "case-save-files", files: [{ path, content, encoding? }] }
+   *   { type: "case-export", files: [{ path, content, encoding? }] }
+   *   { type: "case-ping" } → responds with { type: "case-pong", vault: vaultName }
+   */
+  async handleIframeMessage(data) {
+    var _a, _b, _c, _d, _e, _f;
+    if (!data || !data.type)
+      return;
+    const vault = this.app.vault;
+    switch (data.type) {
+      case "case-ping": {
+        const allNotes = vault.getMarkdownFiles().map((f) => ({
+          basename: f.basename,
+          path: f.path
+        }));
+        (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage(
+          { type: "case-pong", vault: vault.getName(), notes: allNotes },
+          "https://axiom.ancelian.com"
+        );
+        break;
+      }
+      case "case-request-notes": {
+        const notes = vault.getMarkdownFiles().map((f) => ({
+          basename: f.basename,
+          path: f.path
+        }));
+        (_d = (_c = this.frame) == null ? void 0 : _c.contentWindow) == null ? void 0 : _d.postMessage(
+          { type: "case-notes", notes },
+          "https://axiom.ancelian.com"
+        );
+        break;
+      }
+      case "case-open-note": {
+        if (!data.note)
+          return;
+        const noteName = data.note;
+        let targetFile = vault.getAbstractFileByPath(noteName + ".md") || vault.getAbstractFileByPath(noteName);
+        if (targetFile && targetFile instanceof import_obsidian.TFile) {
+          const leaf = this.app.workspace.getLeaf(false);
+          await leaf.openFile(targetFile);
+        } else {
+          await this.app.workspace.openLinkText(noteName, "");
+        }
+        break;
+      }
+      case "case-save-file": {
+        if (!data.path || data.content === void 0)
+          return;
+        await this.saveFileToVault(data.path, data.content, data.encoding);
+        break;
+      }
+      case "case-save-files":
+      case "case-export": {
+        if (!data.files || !Array.isArray(data.files))
+          return;
+        const total = data.files.length;
+        let saved = 0;
+        for (const file of data.files) {
+          if (!file.path || file.content === void 0)
+            continue;
+          await this.saveFileToVault(file.path, file.content, file.encoding);
+          saved++;
+        }
+        (_f = (_e = this.frame) == null ? void 0 : _e.contentWindow) == null ? void 0 : _f.postMessage(
+          { type: "case-export-done", saved, total },
+          "https://axiom.ancelian.com"
+        );
+        break;
+      }
+    }
+  }
+  /**
+   * Save a file to the Obsidian vault under the C.A.S.E. folder.
+   */
+  async saveFileToVault(relativePath, content, encoding) {
+    const vault = this.app.vault;
+    const fullPath = (0, import_obsidian.normalizePath)(`${CASE_EXPORT_FOLDER}/${relativePath}`);
+    const dir = fullPath.substring(0, fullPath.lastIndexOf("/"));
+    if (dir) {
+      await this.ensureFolder(dir);
+    }
+    try {
+      if (encoding === "base64") {
+        const binary = atob(content);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        const existing = vault.getAbstractFileByPath(fullPath);
+        if (existing) {
+          await vault.modifyBinary(existing, bytes.buffer);
+        } else {
+          await vault.createBinary(fullPath, bytes.buffer);
+        }
+      } else {
+        const existing = vault.getAbstractFileByPath(fullPath);
+        if (existing) {
+          await vault.modify(existing, content);
+        } else {
+          await vault.create(fullPath, content);
+        }
+      }
+    } catch (err) {
+      console.error(`[C.A.S.E.] Failed to save ${fullPath}:`, err);
+    }
+  }
+  /**
+   * Recursively ensure a folder path exists in the vault.
+   */
+  async ensureFolder(folderPath) {
+    const vault = this.app.vault;
+    const normalized = (0, import_obsidian.normalizePath)(folderPath);
+    if (vault.getAbstractFileByPath(normalized))
+      return;
+    const parent = normalized.substring(0, normalized.lastIndexOf("/"));
+    if (parent) {
+      await this.ensureFolder(parent);
+    }
+    try {
+      await vault.createFolder(normalized);
+    } catch (e) {
+    }
   }
 };
 var AxiomPlugin = class extends import_obsidian.Plugin {

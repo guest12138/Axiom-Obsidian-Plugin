@@ -1,10 +1,10 @@
 {
 	"id": "axiom-mindmap",
-	"name": "Axiom - 3D Mind Map",
-	"version": "1.0.0",
+	"name": "C.A.S.E. - Mind Map",
+	"version": "1.1.0",
 	"minAppVersion": "0.15.0",
-	"description": "Embed Axiom 3D mind maps directly into Obsidian.",
-	"author": "Axiom Team",
+	"description": "Embed C.A.S.E. mind maps directly into Obsidian. Features bidirectional [[wiki links]], export to vault, and local OPFS storage.",
+	"author": "Ancelian",
 	"authorUrl": "https://axiom.ancelian.com",
 	"isDesktopOnly": false
 }
